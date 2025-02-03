@@ -47,8 +47,6 @@
                 let tableHTML = `<h2>${tier}-Tier</h2><table>`;
                 tableHTML += "<tr><th>Pseudo</th><th>Points</th><th>Scrims</th><th>Tournois</th></tr>";
                 
-                let playersFound = false; // Variable pour vérifier si des joueurs sont ajoutés au tableau
-
                 for (let i = 1; i < rows.length; i++) {
                     if (rows[i][0].trim() === `${tier} Tier` && rows[i][1].trim() !== "0") {
                         tableHTML += `<tr>
@@ -57,15 +55,10 @@
                             <td>${rows[i][3].trim()}</td>
                             <td>${rows[i][4].trim()}</td>
                         </tr>`;
-                        playersFound = true;
                     }
                 }
-
-                // Si des joueurs ont été ajoutés, on ferme le tableau, sinon on ne l'affiche pas
-                if (playersFound) {
-                    tableHTML += "</table>";
-                    rosterDiv.innerHTML += tableHTML;
-                }
+                tableHTML += "</table>";
+                rosterDiv.innerHTML += tableHTML;
             });
         }
 

@@ -33,37 +33,34 @@
     <div id="roster"></div>
 
     <script>
-        async function fetchData() {
-            const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTzyGSS20he-5aKaycv7NsZ6SpBiF810Eclczy8pFy6meDI42Pwp0wKAscfZLnwV0lAiQtMHmmyWIMV/pub?output=csv";
+        async function fetchRoster() {
+            // Remplace avec l'URL de ton Apps Script (copie l'URL obtenue à l'étape précédente)
+            const url = "https://script.google.com/macros/s/AKfycbxBatpQCj9RQxEH8HxOJQ3Zu4njZX5FitP8LRTRIvIwy5btn0xE6MhOic-Zw__9dHESSg/exec";
             const response = await fetch(url);
-            const data = await response.text();
-            const rows = data.split("\n").map(row => row.split(","));
+            const data = await response.json();
 
             const rosterDiv = document.getElementById("roster");
             rosterDiv.innerHTML = "";
 
-            const tiers = ["S", "A", "B", "C", "D", "E"];
-            tiers.forEach(tier => {
-                let tableHTML = `<h2>${tier}-Tier</h2><table>`;
+            data.forEach(tierData => {
+                let tableHTML = `<h2>Roster ${tierData.tier}-Tier</h2><table>`;
                 tableHTML += "<tr><th>Pseudo</th><th>Points</th><th>Scrims</th><th>Tournois</th></tr>";
-                
-                for (let i = 1; i < rows.length; i++) {
-                    if (rows[i][0].trim() === `${tier} Tier` && rows[i][1].trim() !== "0") {
-                        tableHTML += `<tr>
-                            <td>${rows[i][1].trim()}</td>
-                            <td>${rows[i][2].trim()}</td>
-                            <td>${rows[i][3].trim()}</td>
-                            <td>${rows[i][4].trim()}</td>
-                        </tr>`;
-                    }
-                }
+
+                tierData.players.forEach(player => {
+                    tableHTML += `<tr>
+                        <td>${player.pseudo}</td>
+                        <td>${player.points}</td>
+                        <td>${player.scrims}</td>
+                        <td>${player.tournois}</td>
+                    </tr>`;
+                });
+
                 tableHTML += "</table>";
                 rosterDiv.innerHTML += tableHTML;
             });
         }
 
-        fetchData();
-        setInterval(fetchData, 60000);
+        fetchRoster();
     </script>
 </body>
 </html>

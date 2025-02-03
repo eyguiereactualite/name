@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roster</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="roster"></div>
+
+    <script>
+        async function fetchData() {
+            const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTzyGSS20he-5aKaycv7NsZ6SpBiF810Eclczy8pFy6meDI42Pwp0wKAscfZLnwV0lAiQtMHmmyWIMV/pub?output=csv";
+            const response = await fetch(url);
+            const data = await response.text();
+            const rows = data.split("\n").map(row => row.split(","));
+
+            const rosterDiv = document.getElementById("roster");
+            rosterDiv.innerHTML = "";
+
+            const tiers = ["S", "A", "B", "C", "D", "E"];
+            tiers.forEach(tier => {
+                let tableHTML = `<h2>${tier}-Tier</h2><table>`;
+                tableHTML += "<tr><th>Pseudo</th><th>Points</th><th>Scrims</th><th>Tournois</th></tr>";
+                
+                let playersFound = false; // Variable pour vérifier si des joueurs sont ajoutés au tableau
+
+                for (let i = 1; i < rows.length; i++) {
+                    if (rows[i][0].trim() === `${tier} Tier` && rows[i][1].trim() !== "0") {
+                        tableHTML += `<tr>
+                            <td>${rows[i][1].trim()}</td>
+                            <td>${rows[i][2].trim()}</td>
+                            <td>${rows[i][3].trim()}</td>
+                            <td>${rows[i][4].trim()}</td>
+                        </tr>`;
+                        playersFound = true;
+                    }
+                }
+
+                // Si des joueurs ont été ajoutés, on ferme le tableau, sinon on ne l'affiche pas
+                if (playersFound) {
+                    tableHTML += "</table>";
+                    rosterDiv.innerHTML += tableHTML;
+                }
+            });
+        }
+
+        fetchData();
+        setInterval(fetchData, 60000);
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roster</title>
+    <title>Roster Esport</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,39 +27,48 @@
             background-color: #333;
             color: white;
         }
+        h2 {
+            color: #333;
+        }
     </style>
 </head>
 <body>
+    <h1>Roster Esport</h1>
+
     <div id="roster"></div>
 
     <script>
-        async function fetchRoster() {
-            const url = "https://script.google.com/macros/s/AKfycbxBatpQCj9RQxEH8HxOJQ3Zu4njZX5FitP8LRTRIvIwy5btn0xE6MhOic-Zw__9dHESSg/exec";
+        async function fetchData() {
+            const url = "https://script.google.com/macros/s/AKfycbxBatpQCj9RQxEH8HxOJQ3Zu4njZX5FitP8LRTRIvIwy5btn0xE6MhOic-Zw__9dHESSg/exec"; // Remplace par l'URL de ton script
             const response = await fetch(url);
             const data = await response.json();
-
+            
             const rosterDiv = document.getElementById("roster");
             rosterDiv.innerHTML = "";
 
-            data.forEach(tierData => {
-                let tableHTML = `<h2>Roster ${tierData.tier}-Tier</h2><table>`;
+            const tiers = ["S", "A", "B", "C", "D", "E"];
+            tiers.forEach(tier => {
+                let tableHTML = `<h2>${tier}-Tier</h2><table>`;
                 tableHTML += "<tr><th>Pseudo</th><th>Points</th><th>Scrims</th><th>Tournois</th></tr>";
-
-                tierData.players.forEach(player => {
-                    tableHTML += `<tr>
-                        <td>${player.pseudo || "N/A"}</td>  <!-- Si le pseudo est vide, affiche "N/A" -->
-                        <td>${player.points}</td>
-                        <td>${player.scrims}</td>
-                        <td>${player.tournois}</td>
-                    </tr>`;
+                
+                data.forEach(player => {
+                    if (player.tier === tier && player.pseudo !== "0") {
+                        tableHTML += `<tr>
+                            <td>${player.pseudo}</td>
+                            <td>${player.points}</td>
+                            <td>${player.scrims}</td>
+                            <td>${player.tournois}</td>
+                        </tr>`;
+                    }
                 });
-
+                
                 tableHTML += "</table>";
                 rosterDiv.innerHTML += tableHTML;
             });
         }
 
-        fetchRoster();
+        fetchData();
+        setInterval(fetchData, 60000);
     </script>
 </body>
 </html>

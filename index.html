@@ -52,12 +52,18 @@
                 tableHTML += "<tr><th>Pseudo</th><th>Points</th><th>Scrims</th><th>Tournois</th></tr>";
                 
                 data.forEach(player => {
-                    if (player.tier === tier && player.pseudo !== "0") {
+                    if (player.tier === tier) {
+                        // Remplace les valeurs vides ou 0 par "N/A"
+                        const pseudo = player.pseudo || "N/A";
+                        const points = player.points || "N/A";
+                        const scrims = player.scrims || "N/A";
+                        const tournois = player.tournois || "N/A";
+
                         tableHTML += `<tr>
-                            <td>${player.pseudo}</td>
-                            <td>${player.points}</td>
-                            <td>${player.scrims}</td>
-                            <td>${player.tournois}</td>
+                            <td>${pseudo}</td>
+                            <td>${points}</td>
+                            <td>${scrims}</td>
+                            <td>${tournois}</td>
                         </tr>`;
                     }
                 });

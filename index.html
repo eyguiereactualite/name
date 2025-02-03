@@ -34,7 +34,6 @@
 
     <script>
         async function fetchRoster() {
-            // Remplace avec l'URL de ton Apps Script (copie l'URL obtenue à l'étape précédente)
             const url = "https://script.google.com/macros/s/AKfycbxBatpQCj9RQxEH8HxOJQ3Zu4njZX5FitP8LRTRIvIwy5btn0xE6MhOic-Zw__9dHESSg/exec";
             const response = await fetch(url);
             const data = await response.json();
@@ -48,7 +47,7 @@
 
                 tierData.players.forEach(player => {
                     tableHTML += `<tr>
-                        <td>${player.pseudo}</td>
+                        <td>${player.pseudo || "N/A"}</td>  <!-- Si le pseudo est vide, affiche "N/A" -->
                         <td>${player.points}</td>
                         <td>${player.scrims}</td>
                         <td>${player.tournois}</td>
